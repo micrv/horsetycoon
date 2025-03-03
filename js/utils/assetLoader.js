@@ -20,29 +20,47 @@ class AssetLoader {
 
         this.totalAssets = soundFiles.length;
         
-        const loadPromises = soundFiles.map(file => this.loadSound(`assets/Sound/${file}`));
-        
         try {
+            console.log('Starting to load assets...');
+            const loadPromises = soundFiles.map(file => {
+                console.log(`Attempting to load: ${file}`);
+                return this.loadSound(`/assets/Sound/${file}`);
+            });
+            
             await Promise.all(loadPromises);
+            console.log('All assets loaded successfully!');
             this.showMainMenu();
         } catch (error) {
             console.error('Error loading assets:', error);
-            this.loadingText.textContent = 'Error loading assets. Please refresh the page.';
+            this.loadingText.textContent = `Error loading assets: ${error.message}. Check console for details.`;
         }
     }
 
     loadSound(src) {
         return new Promise((resolve, reject) => {
             const audio = new Audio();
+            
             audio.oncanplaythrough = () => {
+                console.log(`Successfully loaded: ${src}`);
                 this.loadedAssets++;
                 this.updateLoadingBar();
                 resolve();
             };
-            audio.onerror = () => {
-                reject(new Error(`Failed to load sound: ${src}`));
+            
+            audio.onerror = (e) => {
+                console.error(`Failed to load sound: ${src}`, e);
+                reject(new Error(`Failed to load ${src}`));
             };
+            
             audio.src = src;
+            
+            // Add timeout to catch stalled loads
+            setTimeout(() => {
+                if (audio.readyState !== 4) {
+                    console.warn(`Loading timed out for: ${src}`);
+                    reject(new Error(`Timeout loading ${src}`));
+                }
+            }, 10000); // 10 second timeout
         });
     }
 
@@ -50,6 +68,7 @@ class AssetLoader {
         const progress = (this.loadedAssets / this.totalAssets) * 100;
         this.loadingBar.style.width = `${progress}%`;
         this.loadingText.textContent = `Loading game assets... ${Math.round(progress)}%`;
+        console.log(`Loading progress: ${Math.round(progress)}%`);
     }
 
     showMainMenu() {

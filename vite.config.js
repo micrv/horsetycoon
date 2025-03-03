@@ -12,13 +12,11 @@ export default defineConfig({
         outDir: 'dist',
         assetsDir: 'assets',
         rollupOptions: {
-            input: {
-                main: resolve(__dirname, 'index.html')
-            },
+            input: resolve(__dirname, 'index.html'),
             output: {
+                entryFileNames: 'assets/[name].[hash].js',
+                chunkFileNames: 'assets/[name].[hash].js',
                 assetFileNames: (assetInfo) => {
-                    const info = assetInfo.name.split('.');
-                    const extType = info[info.length - 1];
                     if (/\.(mp3|wav|ogg)$/i.test(assetInfo.name)) {
                         return `assets/Sound/[name][extname]`;
                     }
