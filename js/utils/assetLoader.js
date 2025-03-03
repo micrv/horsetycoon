@@ -24,7 +24,7 @@ class AssetLoader {
             console.log('Starting to load assets...');
             const loadPromises = soundFiles.map(file => {
                 console.log(`Attempting to load: ${file}`);
-                return this.loadSound(`/assets/Sound/${file}`);
+                return this.loadSound(`./assets/Sound/${file}`);
             });
             
             await Promise.all(loadPromises);
