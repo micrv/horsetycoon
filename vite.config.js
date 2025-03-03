@@ -3,7 +3,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
     root: '.',
-    base: '/Horse-Tycoon/',
+    base: '/horsetycoon/',
     server: {
         port: 3000,
         open: true
@@ -21,7 +21,8 @@ export default defineConfig({
                         return `assets/Sound/[name][extname]`;
                     }
                     return `assets/[name]-[hash][extname]`;
-                }
+                },
+                format: 'es'
             }
         }
     },
@@ -31,5 +32,8 @@ export default defineConfig({
             '@': resolve(__dirname, './js'),
             '@assets': resolve(__dirname, './assets')
         }
+    },
+    optimizeDeps: {
+        include: ['js/**/*.js']
     }
 }); 

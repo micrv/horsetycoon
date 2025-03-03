@@ -1,13 +1,13 @@
-import GameManager from './managers/gameManager.js';
-import UIController from './ui/uiController.js';
-import HorseUI from './ui/horseUI.js';
-import RaceUI from './ui/raceUI.js';
-import MarketUI from './ui/marketUI.js';
-import BreedingUI from './ui/breedingUI.js';
-import TrainingUI from './ui/trainingUI.js';
-import audioManager from './utils/audioManager.js';
+import { default as GameManager } from './managers/gameManager.js';
+import { default as UIController } from './ui/uiController.js';
+import { default as HorseUI } from './ui/horseUI.js';
+import { default as RaceUI } from './ui/raceUI.js';
+import { default as MarketUI } from './ui/marketUI.js';
+import { default as BreedingUI } from './ui/breedingUI.js';
+import { default as TrainingUI } from './ui/trainingUI.js';
+import { default as audioManager } from './utils/audioManager.js';
 import eventSystem, { GameEvents } from './utils/eventSystem.js';
-import assetLoader from './utils/assetLoader.js';
+import { default as assetLoader } from './utils/assetLoader.js';
 
 class HorseTycoon {
     constructor() {
