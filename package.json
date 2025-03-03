@@ -1,0 +1,23 @@
+{
+  "name": "horse-tycoon",
+  "version": "1.0.0",
+  "description": "A horse breeding and racing management game",
+  "main": "js/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "gh-pages": "^6.1.1"
+  },
+  "author": "",
+  "license": "MIT"
+} 

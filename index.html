@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horse Tycoon</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+    <!-- Audio Controls -->
+    <div id="audioControls" class="audio-controls">
+        <button id="toggleMusic" class="audio-btn" title="Toggle Music">
+            <span class="icon">🎵</span>
+        </button>
+        <div class="volume-slider">
+            <input type="range" id="musicVolume" min="0" max="100" value="50">
+        </div>
+        <button id="toggleSfx" class="audio-btn" title="Toggle Sound Effects">
+            <span class="icon">🔊</span>
+        </button>
+        <div class="volume-slider">
+            <input type="range" id="sfxVolume" min="0" max="100" value="70">
+        </div>
+    </div>
+
+    <div id="game-container">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="screen">
+            <div class="loading-content">
+                <h1>HORSE TYCOON</h1>
+                <div class="loading-bar-container">
+                    <div class="loading-bar"></div>
+                </div>
+                <p class="loading-text">Loading game assets...</p>
+            </div>
+        </div>
+
+        <!-- Main Menu Screen -->
+        <div id="main-menu-screen" class="screen">
+            <div class="main-menu-content">
+                <h1 class="game-title">HORSE TYCOON</h1>
+                <div class="menu-buttons">
+                    <button id="new-game-btn" class="primary-btn">New Game</button>
+                    <button id="load-game-btn" class="primary-btn">Load Game</button>
+                    <button id="options-btn" class="secondary-btn">Options</button>
+                    <button id="credits-btn" class="secondary-btn">Credits</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Setup Screen -->
+        <div id="player-setup-screen" class="screen">
+            <div class="screen-header">
+                <h2>Create Your Stable</h2>
+            </div>
+            <div class="setup-form">
+                <div class="form-group">
+                    <label for="stable-name">Stable Name:</label>
+                    <input type="text" id="stable-name" maxlength="20" placeholder="Enter stable name...">
+                </div>
+                <div class="form-group">
+                    <label for="player-name">Your Name:</label>
+                    <input type="text" id="player-name" maxlength="20" placeholder="Enter your name...">
+                </div>
+                <div class="form-group">
+                    <label>Difficulty:</label>
+                    <div class="difficulty-options">
+                        <button class="difficulty-btn" data-difficulty="easy">Easy</button>
+                        <button class="difficulty-btn selected" data-difficulty="normal">Normal</button>
+                        <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Starting Horse:</label>
+                    <div id="starter-horses" class="starter-horses-container">
+                        <!-- Starter horses will be populated here -->
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button id="back-to-menu-btn" class="secondary-btn">Back</button>
+                    <button id="start-game-btn" class="primary-btn">Start Game</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game UI -->
+        <div id="game-ui" class="screen">
+            <!-- Player Info Bar -->
+            <div id="player-info-bar">
+                <div class="player-stable-info">
+                    <span id="stable-name-display">Stable Name</span>
+                    <span id="reputation-display">⭐ 0</span>
+                </div>
+                <div class="player-resources">
+                    <div class="resource">
+                        <span class="resource-icon">💰</span>
+                        <span id="money-display">$10,000</span>
+                    </div>
+                    <div class="resource">
+                        <span class="resource-icon">🏆</span>
+                        <span id="trophies-display">0</span>
+                    </div>
+                    <div class="resource">
+                        <span class="resource-icon">📅</span>
+                        <span id="day-display">Day 1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Screens -->
+            <div id="game-screens-container">
+                <!-- Stable Screen -->
+                <div id="stable-screen" class="game-screen">
+                    <div class="screen-header">
+                        <h2>Your Stable</h2>
+                        <div class="header-actions">
+                            <button id="sort-horses-btn" class="icon-btn"><span>Sort</span></button>
+                            <button id="filter-horses-btn" class="icon-btn"><span>Filter</span></button>
+                        </div>
+                    </div>
+                    <div class="stable-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Horses:</span>
+                            <span id="horse-count">1/4</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Stable Level:</span>
+                            <span id="stable-level">1</span>
+                        </div>
+                    </div>
+                    <div id="horses-container" class="horses-grid">
+                        <!-- Horses will be displayed here -->
+                    </div>
+                    <div class="stable-actions">
+                        <button id="upgrade-stable-btn" class="secondary-btn">Upgrade Stable</button>
+                    </div>
+                </div>
+
+                <!-- Horse Detail Screen -->
+                <div id="horse-detail-screen" class="game-screen">
+                    <div class="screen-header with-back">
+                        <button class="back-btn">←</button>
+                        <h2 id="horse-name-header">Horse Name</h2>
+                        <div class="header-actions">
+                            <button id="horse-actions-btn" class="icon-btn"><span>⋮</span></button>
+                        </div>
+                    </div>
+                    <div class="horse-detail-container">
+                        <div class="horse-portrait-container">
+                            <div id="horse-portrait" class="horse-portrait">
+                                <!-- Horse portrait will be displayed here -->
+                            </div>
+                            <div class="horse-badges">
+                                <!-- Badges will be displayed here -->
+                            </div>
+                        </div>
+                        <div class="horse-info">
+                            <div class="info-row">
+                                <span class="info-label">Age:</span>
+                                <span id="horse-age">2 years</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Gender:</span>
+                                <span id="horse-gender">Stallion</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Breed:</span>
+                                <span id="horse-breed">Thoroughbred</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Color:</span>
+                                <span id="horse-color">Bay</span>
+                            </div>
+                        </div>
+                        <div class="horse-stats">
+                            <h3>Stats</h3>
+                            <div class="stat-bars">
+                                <div class="stat-bar-container">
+                                    <span class="stat-label">Speed</span>
+                                    <div class="stat-bar">
+                                        <div id="speed-bar" class="stat-bar-fill" style="width: 65%;"></div>
+                                    </div>
+                                    <span id="speed-value" class="stat-value">65</span>
+                                </div>
+                                <div class="stat-bar-container">
+                                    <span class="stat-label">Acceleration</span>
+                                    <div class="stat-bar">
+                                        <div id="acceleration-bar" class="stat-bar-fill" style="width: 70%;"></div>
+                                    </div>
+                                    <span id="acceleration-value" class="stat-value">70</span>
+                                </div>
+                                <div class="stat-bar-container">
+                                    <span class="stat-label">Stamina</span>
+                                    <div class="stat-bar">
+                                        <div id="stamina-bar" class="stat-bar-fill" style="width: 60%;"></div>
+                                    </div>
+                                    <span id="stamina-value" class="stat-value">60</span>
+                                </div>
+                                <div class="stat-bar-container">
+                                    <span class="stat-label">Jumping</span>
+                                    <div class="stat-bar">
+                                        <div id="jumping-bar" class="stat-bar-fill" style="width: 55%;"></div>
+                                    </div>
+                                    <span id="jumping-value" class="stat-value">55</span>
+                                </div>
+                                <div class="stat-bar-container">
+                                    <span class="stat-label">Temperament</span>
+                                    <div class="stat-bar">
+                                        <div id="temperament-bar" class="stat-bar-fill" style="width: 75%;"></div>
+                                    </div>
+                                    <span id="temperament-value" class="stat-value">75</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="horse-traits">
+                            <h3>Traits</h3>
+                            <div id="traits-container" class="traits-list">
+                                <!-- Traits will be displayed here -->
+                            </div>
+                        </div>
+                        <div class="horse-actions">
+                            <button id="train-horse-btn" class="primary-btn">Train</button>
+                            <button id="race-horse-btn" class="primary-btn">Enter Race</button>
+                            <button id="breed-horse-btn" class="secondary-btn">Breed</button>
+                            <button id="sell-horse-btn" class="secondary-btn">Sell</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Race Screen -->
+                <div id="race-screen" class="game-screen">
+                    <div class="screen-header">
+                        <h2>Races</h2>
+                        <div class="header-actions">
+                            <button id="race-history-btn" class="icon-btn"><span>History</span></button>
+                        </div>
+                    </div>
+                    <div class="race-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="sprint">Sprint</button>
+                        <button class="filter-btn" data-filter="middle">Middle</button>
+                        <button class="filter-btn" data-filter="endurance">Endurance</button>
+                        <button class="filter-btn" data-filter="jumping">Jumping</button>
+                    </div>
+                    <div id="races-container" class="races-list">
+                        <!-- Races will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Race Detail Screen -->
+                <div id="race-detail-screen" class="game-screen">
+                    <div class="screen-header with-back">
+                        <button class="back-btn">←</button>
+                        <h2 id="race-name-header">Race Name</h2>
+                    </div>
+                    <div class="race-detail-container">
+                        <div class="race-info">
+                            <div class="info-row">
+                                <span class="info-label">Distance:</span>
+                                <span id="race-distance">1200m</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Type:</span>
+                                <span id="race-type">Sprint</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Surface:</span>
+                                <span id="race-surface">Dirt</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Prize:</span>
+                                <span id="race-prize">$5,000</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Entry Fee:</span>
+                                <span id="race-fee">$500</span>
+                            </div>
+                        </div>
+                        <div class="race-requirements">
+                            <h3>Requirements</h3>
+                            <ul id="race-requirements-list">
+                                <!-- Requirements will be displayed here -->
+                            </ul>
+                        </div>
+                        <div class="horse-selection">
+                            <h3>Select a Horse</h3>
+                            <div id="eligible-horses" class="horses-list">
+                                <!-- Eligible horses will be displayed here -->
+                            </div>
+                        </div>
+                        <div class="race-actions">
+                            <button id="enter-race-btn" class="primary-btn">Enter Race</button>
+                            <button id="cancel-race-btn" class="secondary-btn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Screen -->
+                <div id="market-screen" class="game-screen">
+                    <div class="screen-header">
+                        <h2>Horse Market</h2>
+                        <div class="header-actions">
+                            <button id="market-refresh-btn" class="icon-btn"><span>Refresh</span></button>
+                        </div>
+                    </div>
+                    <div class="market-tabs">
+                        <button class="tab-btn active" data-tab="buy">Buy Horses</button>
+                        <button class="tab-btn" data-tab="sell">Your Listings</button>
+                    </div>
+                    <div id="buy-tab" class="market-tab-content">
+                        <div class="market-filters">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="male">Male</button>
+                            <button class="filter-btn" data-filter="female">Female</button>
+                            <button class="filter-btn" data-filter="young">Young</button>
+                        </div>
+                        <div id="market-listings" class="market-listings">
+                            <!-- Market listings will be displayed here -->
+                        </div>
+                    </div>
+                    <div id="sell-tab" class="market-tab-content" style="display: none;">
+                        <div class="player-listings">
+                            <h3>Your Listings</h3>
+                            <div id="player-market-listings" class="market-listings">
+                                <!-- Player's listings will be displayed here -->
+                            </div>
+                        </div>
+                        <div class="market-actions">
+                            <button id="list-horse-btn" class="primary-btn">List a Horse</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Breeding Screen -->
+                <div id="breeding-screen" class="game-screen">
+                    <div class="screen-header">
+                        <h2>Breeding Center</h2>
+                        <div class="header-actions">
+                            <button id="breeding-history-btn" class="icon-btn"><span>History</span></button>
+                        </div>
+                    </div>
+                    <div class="breeding-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Success Rate:</span>
+                            <span id="breeding-success-rate">70%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Pending Births:</span>
+                            <span id="pending-births">0</span>
+                        </div>
+                    </div>
+                    <div class="breeding-selection">
+                        <div class="selection-column">
+                            <h3>Sire (Male)</h3>
+                            <div id="sire-selection" class="breeding-horses">
+                                <!-- Male horses will be displayed here -->
+                            </div>
+                        </div>
+                        <div class="selection-column">
+                            <h3>Dam (Female)</h3>
+                            <div id="dam-selection" class="breeding-horses">
+                                <!-- Female horses will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="breeding-info">
+                        <h3>Breeding Information</h3>
+                        <div class="info-row">
+                            <span class="info-label">Base Success:</span>
+                            <span id="base-success-chance">70%</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Compatibility:</span>
+                            <span id="compatibility-bonus">+0%</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Fee:</span>
+                            <span id="breeding-fee">$1,000</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Gestation:</span>
+                            <span id="gestation-period">10 days</span>
+                        </div>
+                    </div>
+                    <div class="breeding-actions">
+                        <button id="breed-btn" class="primary-btn" disabled>Breed Horses</button>
+                        <button id="reset-selection-btn" class="secondary-btn">Reset Selection</button>
+                    </div>
+                </div>
+
+                <!-- Settings Screen -->
+                <div id="settings-screen" class="game-screen">
+                    <div class="screen-header">
+                        <h2>Settings</h2>
+                    </div>
+                    <div class="settings-container">
+                        <div class="settings-group">
+                            <h3>Game Settings</h3>
+                            <div class="settings-option">
+                                <span class="setting-label">Game Speed</span>
+                                <div class="setting-control">
+                                    <button class="speed-btn" data-speed="slow">Slow</button>
+                                    <button class="speed-btn selected" data-speed="normal">Normal</button>
+                                    <button class="speed-btn" data-speed="fast">Fast</button>
+                                </div>
+                            </div>
+                            <div class="settings-option">
+                                <span class="setting-label">Notifications</span>
+                                <div class="setting-control">
+                                    <label class="toggle">
+                                        <input type="checkbox" id="notifications-toggle" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="settings-option">
+                                <span class="setting-label">Auto-Save</span>
+                                <div class="setting-control">
+                                    <label class="toggle">
+                                        <input type="checkbox" id="autosave-toggle" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="settings-group">
+                            <h3>Audio Settings</h3>
+                            <div class="settings-option">
+                                <span class="setting-label">Music Volume</span>
+                                <div class="setting-control">
+                                    <input type="range" id="music-volume" min="0" max="100" value="70">
+                                    <span id="music-volume-value">70%</span>
+                                </div>
+                            </div>
+                            <div class="settings-option">
+                                <span class="setting-label">Sound Effects</span>
+                                <div class="setting-control">
+                                    <input type="range" id="sfx-volume" min="0" max="100" value="80">
+                                    <span id="sfx-volume-value">80%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="settings-actions">
+                            <button id="save-settings-btn" class="primary-btn">Save Settings</button>
+                            <button id="reset-settings-btn" class="secondary-btn">Reset to Default</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div id="bottom-navigation">
+                <button class="nav-btn active" data-screen="stable">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Stable</span>
+                </button>
+                <button class="nav-btn" data-screen="race">
+                    <span class="nav-icon">🏁</span>
+                    <span class="nav-label">Races</span>
+                </button>
+                <button class="nav-btn" data-screen="market">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-label">Market</span>
+                </button>
+                <button class="nav-btn" data-screen="breeding">
+                    <span class="nav-icon">🐎</span>
+                    <span class="nav-label">Breeding</span>
+                </button>
+                <button class="nav-btn" data-screen="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Settings</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <div id="modal-container" class="modal-container">
+            <!-- Training Modal -->
+            <div id="training-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Train Horse</h3>
+                        <button class="close-modal-btn">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="training-options">
+                            <div class="training-option" data-training="speed">
+                                <h4>Speed Training</h4>
+                                <p>Focus on improving horse's top speed.</p>
+                                <div class="training-effect">
+                                    <span class="effect-label">Speed</span>
+                                    <span class="effect-value positive">+3</span>
+                                </div>
+                                <div class="training-effect">
+                                    <span class="effect-label">Stamina</span>
+                                    <span class="effect-value negative">-1</span>
+                                </div>
+                                <div class="training-cost">
+                                    <span class="cost-label">Cost:</span>
+                                    <span class="cost-value">$500</span>
+                                </div>
+                            </div>
+                            <div class="training-option" data-training="acceleration">
+                                <h4>Acceleration Training</h4>
+                                <p>Improve horse's ability to accelerate quickly.</p>
+                                <div class="training-effect">
+                                    <span class="effect-label">Acceleration</span>
+                                    <span class="effect-value positive">+3</span>
+                                </div>
+                                <div class="training-effect">
+                                    <span class="effect-label">Jumping</span>
+                                    <span class="effect-value negative">-1</span>
+                                </div>
+                                <div class="training-cost">
+                                    <span class="cost-label">Cost:</span>
+                                    <span class="cost-value">$500</span>
+                                </div>
+                            </div>
+                            <div class="training-option" data-training="stamina">
+                                <h4>Stamina Training</h4>
+                                <p>Build horse's endurance for longer races.</p>
+                                <div class="training-effect">
+                                    <span class="effect-label">Stamina</span>
+                                    <span class="effect-value positive">+3</span>
+                                </div>
+                                <div class="training-effect">
+                                    <span class="effect-label">Speed</span>
+                                    <span class="effect-value negative">-1</span>
+                                </div>
+                                <div class="training-cost">
+                                    <span class="cost-label">Cost:</span>
+                                    <span class="cost-value">$500</span>
+                                </div>
+                            </div>
+                            <div class="training-option" data-training="jumping">
+                                <h4>Jumping Training</h4>
+                                <p>Improve horse's jumping ability.</p>
+                                <div class="training-effect">
+                                    <span class="effect-label">Jumping</span>
+                                    <span class="effect-value positive">+3</span>
+                                </div>
+                                <div class="training-effect">
+                                    <span class="effect-label">Acceleration</span>
+                                    <span class="effect-value negative">-1</span>
+                                </div>
+                                <div class="training-cost">
+                                    <span class="cost-label">Cost:</span>
+                                    <span class="cost-value">$500</span>
+                                </div>
+                            </div>
+                            <div class="training-option" data-training="temperament">
+                                <h4>Temperament Training</h4>
+                                <p>Improve horse's behavior and racing mentality.</p>
+                                <div class="training-effect">
+                                    <span class="effect-label">Temperament</span>
+                                    <span class="effect-value positive">+3</span>
+                                </div>
+                                <div class="training-cost">
+                                    <span class="cost-label">Cost:</span>
+                                    <span class="cost-value">$700</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirm-training-btn" class="primary-btn">Train</button>
+                        <button class="cancel-btn secondary-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sell Horse Modal -->
+            <div id="sell-horse-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Sell Horse</h3>
+                        <button class="close-modal-btn">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="sell-options">
+                            <div class="sell-option" data-sell-type="instant">
+                                <h4>Instant Sale</h4>
+                                <p>Sell immediately to the stable for a fixed price.</p>
+                                <div class="sell-price">
+                                    <span class="price-label">Offer:</span>
+                                    <span id="instant-sell-price" class="price-value">$3,500</span>
+                                </div>
+                            </div>
+                            <div class="sell-option" data-sell-type="market">
+                                <h4>List on Market</h4>
+                                <p>List your horse on the market for other players.</p>
+                                <div class="form-group">
+                                    <label for="market-listing-price">Set Your Price:</label>
+                                    <div class="price-input">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="number" id="market-listing-price" min="1" max="1000000" value="5000">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="market-listing-duration">Listing Duration:</label>
+                                    <select id="market-listing-duration">
+                                        <option value="3">3 Days</option>
+                                        <option value="7" selected>7 Days</option>
+                                        <option value="14">14 Days</option>
+                                    </select>
+                                </div>
+                                <div class="listing-fee">
+                                    <span class="fee-label">Listing Fee:</span>
+                                    <span id="market-listing-fee" class="fee-value">$250</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirm-sale-btn" class="primary-btn" disabled>Confirm Sale</button>
+                        <button class="cancel-btn secondary-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Race Results Modal -->
+            <div id="race-results-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Race Results</h3>
+                        <button class="close-modal-btn">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 id="race-result-name">Summer Sprint Cup</h4>
+                        <div class="race-sequence">
+                            <div id="race-animation" class="race-animation">
+                                <!-- Race animation will be displayed here -->
+                            </div>
+                        </div>
+                        <div class="race-results-table">
+                            <div class="results-header">
+                                <span class="position-header">Pos</span>
+                                <span class="horse-header">Horse</span>
+                                <span class="jockey-header">Jockey</span>
+                                <span class="time-header">Time</span>
+                            </div>
+                            <div id="race-results-list" class="results-list">
+                                <!-- Race results will be displayed here -->
+                            </div>
+                        </div>
+                        <div id="player-result" class="player-result">
+                            <!-- Player's race result information -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="close-modal-btn primary-btn">Continue</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Modal -->
+            <div id="notification-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="notification-title">Notification</h3>
+                        <button class="close-modal-btn">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="notification-message">This is a notification message.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="close-modal-btn primary-btn">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Container for notifications -->
+        <div id="message-container"></div>
+    </div>
+
+    <!-- Load JavaScript -->
+    <script>
+        // Global game object
+        window.HorseTycoon = {};
+    </script>
+    <script src="js/utils/utils.js"></script>
+    <script src="js/utils/eventSystem.js"></script>
+    <script src="js/utils/audioManager.js"></script>
+    <script src="js/models/horse.js"></script>
+    <script src="js/models/player.js"></script>
+    <script src="js/models/race.js"></script>
+    <script src="js/managers/horseManager.js"></script>
+    <script src="js/managers/raceManager.js"></script>
+    <script src="js/managers/breedingManager.js"></script>
+    <script src="js/managers/marketManager.js"></script>
+    <script src="js/managers/gameManager.js"></script>
+    <script src="js/ui/ui.js"></script>
+    <script src="js/ui/horseUI.js"></script>
+    <script src="js/ui/raceUI.js"></script>
+    <script src="js/ui/marketUI.js"></script>
+    <script src="js/ui/breedingUI.js"></script>
+    <script src="js/ui/trainingUI.js"></script>
+    <script src="js/ui/uiController.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 

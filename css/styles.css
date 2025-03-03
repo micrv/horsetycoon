@@ -1,0 +1,1334 @@
+/* =====================================================
+   Horse Tycoon - Main Stylesheet
+   ===================================================== */
+
+/* Base Styles */
+:root {
+    --primary-color: #4a7c59;
+    --primary-light: #8abb98;
+    --primary-dark: #2c4c36;
+    --secondary-color: #c3a38a;
+    --secondary-light: #e9d9c7;
+    --secondary-dark: #8c6e59;
+    --text-color: #333333;
+    --light-text: #ffffff;
+    --dark-text: #222222;
+    --background-color: #f5f5f0;
+    --card-background: #ffffff;
+    --border-color: #e0e0e0;
+    --success-color: #4caf50;
+    --danger-color: #f44336;
+    --warning-color: #ff9800;
+    --info-color: #2196f3;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --modal-overlay: rgba(0, 0, 0, 0.6);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* Buttons */
+button {
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    border: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 4px;
+    margin: 5px 0;
+}
+
+.primary-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+.primary-btn:disabled {
+    background-color: var(--border-color);
+    color: #888;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    background-color: var(--secondary-color);
+    color: var(--dark-text);
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 4px;
+    margin: 5px 0;
+}
+
+.secondary-btn:hover {
+    background-color: var(--secondary-dark);
+    color: var(--light-text);
+}
+
+.icon-btn {
+    background-color: transparent;
+    color: var(--text-color);
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.icon-btn:hover {
+    background-color: var(--secondary-light);
+}
+
+.cancel-btn {
+    background-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.cancel-btn:hover {
+    background-color: #d5d5d5;
+}
+
+.back-btn {
+    background: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    padding: 5px 10px;
+}
+
+/* Forms */
+input, select {
+    font-family: 'Montserrat', sans-serif;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Game Container */
+#game-container {
+    width: 100%;
+    height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--background-color);
+}
+
+/* Screen Styles */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    background-color: var(--background-color);
+    z-index: 1;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* Loading Screen */
+#loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    z-index: 100;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-bar-container {
+    width: 300px;
+    height: 20px;
+    background-color: var(--primary-dark);
+    border-radius: 10px;
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+.loading-bar {
+    height: 100%;
+    width: 0;
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+/* Main Menu Screen */
+#main-menu-screen {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/menu-background.jpg');
+    background-size: cover;
+    background-position: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-menu-content {
+    text-align: center;
+    color: var(--light-text);
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.game-title {
+    font-size: 3rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-buttons button {
+    padding: 15px;
+    font-size: 1.2rem;
+}
+
+/* Player Setup Screen */
+#player-setup-screen {
+    padding: 20px;
+}
+
+.difficulty-options {
+    display: flex;
+    gap: 10px;
+}
+
+.difficulty-btn {
+    flex: 1;
+    padding: 10px;
+    background-color: var(--card-background);
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.difficulty-btn.selected {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    border-color: var(--primary-color);
+}
+
+.starter-horses-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.starter-horse-card {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    width: calc(50% - 15px);
+    background-color: var(--card-background);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.starter-horse-card.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-light);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Game UI */
+#game-ui {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Player Info Bar */
+#player-info-bar {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    z-index: 5;
+}
+
+.player-stable-info {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.player-resources {
+    display: flex;
+    gap: 15px;
+}
+
+.resource {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.resource-icon {
+    font-size: 1.2rem;
+}
+
+/* Game Screens Container */
+#game-screens-container {
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+}
+
+.game-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.game-screen.active {
+    display: flex;
+}
+
+/* Screen Headers */
+.screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.screen-header.with-back {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+}
+
+.screen-header h2 {
+    margin-bottom: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Bottom Navigation */
+#bottom-navigation {
+    display: flex;
+    background-color: var(--primary-dark);
+    padding: 10px 0;
+    justify-content: space-around;
+    z-index: 5;
+}
+
+.nav-btn {
+    background: none;
+    color: var(--light-text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 10px;
+    flex: 1;
+    border-radius: 0;
+}
+
+.nav-btn.active {
+    background-color: var(--primary-color);
+}
+
+.nav-icon {
+    font-size: 1.5rem;
+    margin-bottom: 3px;
+}
+
+.nav-label {
+    font-size: 0.8rem;
+}
+
+/* Horse Card Styles */
+.horses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.horse-card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.horse-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.horse-card-image {
+    height: 100px;
+    background-color: var(--secondary-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.horse-card-info {
+    padding: 10px;
+}
+
+.horse-card-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.horse-card-stats {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+    font-size: 0.8rem;
+}
+
+.horse-stat {
+    background-color: var(--secondary-light);
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+/* Horse Detail Styles */
+.horse-detail-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.horse-portrait-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.horse-portrait {
+    width: 200px;
+    height: 200px;
+    background-color: var(--secondary-light);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.horse-badges {
+    display: flex;
+    gap: 5px;
+}
+
+.badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.badge.champion {
+    background-color: gold;
+    color: var(--dark-text);
+}
+
+.badge.veteran {
+    background-color: var(--secondary-dark);
+    color: var(--light-text);
+}
+
+.horse-info {
+    background-color: var(--card-background);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.info-label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+/* Stat Bars */
+.horse-stats {
+    background-color: var(--card-background);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.stat-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.stat-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stat-label {
+    width: 100px;
+    font-size: 0.9rem;
+}
+
+.stat-bar {
+    flex: 1;
+    height: 15px;
+    background-color: var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 8px;
+}
+
+.stat-value {
+    width: 30px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Horse Traits */
+.horse-traits {
+    background-color: var(--card-background);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.traits-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.trait-tag {
+    background-color: var(--secondary-light);
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.trait-tag.positive {
+    background-color: var(--success-color);
+    color: var(--light-text);
+}
+
+.trait-tag.negative {
+    background-color: var(--danger-color);
+    color: var(--light-text);
+}
+
+.horse-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Race Styles */
+.race-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.filter-btn {
+    background-color: var(--card-background);
+    color: var(--text-color);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.filter-btn.active {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+}
+
+.races-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.race-card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.race-info-primary {
+    margin-bottom: 5px;
+}
+
+.race-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.race-info-secondary {
+    display: flex;
+    gap: 15px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.race-prize {
+    font-weight: 600;
+    color: var(--success-color);
+}
+
+/* Market Styles */
+.market-tabs {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    background-color: var(--card-background);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.tab-btn.active {
+    border-bottom: 2px solid var(--primary-color);
+    font-weight: 600;
+}
+
+.market-tab-content {
+    margin-top: 10px;
+}
+
+.market-listing {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    padding: 15px;
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.listing-image {
+    width: 80px;
+    height: 80px;
+    background-color: var(--secondary-light);
+    border-radius: 8px;
+    margin-right: 15px;
+}
+
+.listing-details {
+    flex: 1;
+}
+
+.listing-horse-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.listing-horse-info {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.listing-price {
+    font-weight: 600;
+    color: var(--success-color);
+    font-size: 1.1rem;
+}
+
+.listing-action {
+    align-self: center;
+}
+
+/* Breeding Styles */
+.breeding-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+    background-color: var(--card-background);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.breeding-selection {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.selection-column {
+    flex: 1;
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.breeding-horses {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.breeding-horse-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.breeding-horse-card.selected {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.breeding-horse-image {
+    width: 50px;
+    height: 50px;
+    background-color: var(--secondary-light);
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.breeding-horse-details {
+    flex: 1;
+}
+
+.breeding-horse-name {
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.breeding-horse-stats {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.breeding-info {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.breeding-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Settings Styles */
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.settings-group {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.settings-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.setting-control {
+    display: flex;
+    align-items: center;
+}
+
+.speed-btn {
+    padding: 8px 15px;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+}
+
+.speed-btn.selected {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    border-color: var(--primary-color);
+}
+
+.speed-btn:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.speed-btn:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+/* Toggle Switch */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
+/* Range Slider */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 200px;
+    height: 10px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+}
+
+/* Modal Styles */
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--modal-overlay);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.modal-container.active {
+    display: flex;
+}
+
+.modal {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: none;
+}
+
+.modal.active {
+    display: block;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.close-modal-btn {
+    background: none;
+    font-size: 1.5rem;
+    color: #888;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 15px;
+}
+
+.modal-footer {
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Training Options */
+.training-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.training-option {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.training-option:hover {
+    border-color: var(--primary-light);
+}
+
+.training-option.selected {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.training-effect {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
+
+.effect-value.positive {
+    color: var(--success-color);
+}
+
+.effect-value.negative {
+    color: var(--danger-color);
+}
+
+.training-cost {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+/* Sell Options */
+.sell-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sell-option {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sell-option:hover {
+    border-color: var(--primary-light);
+}
+
+.sell-option.selected {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.sell-price {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.price-input {
+    display: flex;
+    align-items: center;
+}
+
+.currency-symbol {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    background-color: #f5f5f5;
+    border: 1px solid var(--border-color);
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    height: 40px;
+}
+
+.price-input input {
+    border-radius: 0 4px 4px 0;
+}
+
+/* Race Results */
+.race-sequence {
+    margin: 20px 0;
+    height: 150px;
+    background-color: var(--secondary-light);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.race-animation {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.race-results-table {
+    margin: 20px 0;
+}
+
+.results-header {
+    display: grid;
+    grid-template-columns: 40px 3fr 2fr 1fr;
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+    font-weight: 600;
+}
+
+.results-list {
+    background-color: var(--card-background);
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+}
+
+.result-row {
+    display: grid;
+    grid-template-columns: 40px 3fr 2fr 1fr;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.result-row:last-child {
+    border-bottom: none;
+}
+
+.result-row.player {
+    background-color: var(--primary-light);
+    font-weight: 600;
+}
+
+.player-result {
+    background-color: var(--card-background);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Message Container */
+#message-container {
+    position: fixed;
+    bottom: 70px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.game-message {
+    background-color: var(--card-background);
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    max-width: 80%;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: message-appear 0.3s forwards;
+}
+
+.game-message.success {
+    background-color: var(--success-color);
+    color: var(--light-text);
+}
+
+.game-message.error {
+    background-color: var(--danger-color);
+    color: var(--light-text);
+}
+
+.game-message.warning {
+    background-color: var(--warning-color);
+    color: var(--dark-text);
+}
+
+.game-message.info {
+    background-color: var(--info-color);
+    color: var(--light-text);
+}
+
+@keyframes message-appear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+/* Audio Controls */
+.audio-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    z-index: 1000;
+}
+
+.audio-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.audio-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.audio-btn .icon {
+    font-size: 24px;
+}
+
+.audio-btn.muted .icon {
+    opacity: 0.5;
+}
+
+.volume-slider {
+    width: 80px;
+}
+
+.volume-slider input[type="range"] {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.volume-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-slider input[type="range"]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+} 
