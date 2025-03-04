@@ -8,12 +8,22 @@ class BreedingUI {
     }
 
     setupEventListeners() {
-        document.getElementById('breedingTab').addEventListener('click', () => this.showBreedingCenter());
-        document.getElementById('confirmBreedingBtn').addEventListener('click', () => this.confirmBreeding());
-        document.getElementById('cancelBreedingBtn').addEventListener('click', () => this.resetBreedingSelection());
+        // Helper function to safely add event listener
+        const safeAddEvent = (id, event, handler) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener(event, handler);
+            } else {
+                console.warn(`Element with ID "${id}" not found in BreedingUI.setupEventListeners()`);
+            }
+        };
+        
+        safeAddEvent('breedingTab', 'click', () => this.showBreedingCenter());
+        safeAddEvent('confirmBreedingBtn', 'click', () => this.confirmBreeding());
+        safeAddEvent('cancelBreedingBtn', 'click', () => this.resetBreedingSelection());
         
         // Breeding history tab
-        document.getElementById('breedingHistoryTab').addEventListener('click', () => this.showBreedingHistory());
+        safeAddEvent('breedingHistoryTab', 'click', () => this.showBreedingHistory());
     }
 
     showBreedingCenter() {

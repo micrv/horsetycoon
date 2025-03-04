@@ -6,10 +6,25 @@ class RaceUI {
     }
 
     setupEventListeners() {
-        document.getElementById('raceScheduleTab').addEventListener('click', () => this.showRaceSchedule());
-        document.getElementById('raceHistoryTab').addEventListener('click', () => this.showRaceHistory());
-        document.getElementById('enterRaceBtn').addEventListener('click', () => this.initiateRaceEntry());
-        document.getElementById('confirmRaceEntryBtn').addEventListener('click', () => this.confirmRaceEntry());
+        const raceScheduleTab = document.getElementById('raceScheduleTab');
+        if (raceScheduleTab) {
+            raceScheduleTab.addEventListener('click', () => this.showRaceSchedule());
+        }
+        
+        const raceHistoryTab = document.getElementById('raceHistoryTab');
+        if (raceHistoryTab) {
+            raceHistoryTab.addEventListener('click', () => this.showRaceHistory());
+        }
+        
+        const enterRaceBtn = document.getElementById('enterRaceBtn');
+        if (enterRaceBtn) {
+            enterRaceBtn.addEventListener('click', () => this.initiateRaceEntry());
+        }
+        
+        const confirmRaceEntryBtn = document.getElementById('confirmRaceEntryBtn');
+        if (confirmRaceEntryBtn) {
+            confirmRaceEntryBtn.addEventListener('click', () => this.confirmRaceEntry());
+        }
     }
 
     showRaceSchedule() {

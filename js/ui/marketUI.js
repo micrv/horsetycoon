@@ -14,27 +14,46 @@ class MarketUI {
     }
 
     setupEventListeners() {
+        // Helper function to safely add event listener
+        const safeAddEvent = (id, event, handler) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener(event, handler);
+            } else {
+                console.warn(`Element with ID "${id}" not found in MarketUI.setupEventListeners()`);
+            }
+        };
+        
         // Market Tabs
-        document.getElementById('buyTab').addEventListener('click', () => this.showBuyMarket());
-        document.getElementById('sellTab').addEventListener('click', () => this.showSellMarket());
+        safeAddEvent('buyTab', 'click', () => this.showBuyMarket());
+        safeAddEvent('sellTab', 'click', () => this.showSellMarket());
         
         // Filters
-        document.getElementById('marketFilters').addEventListener('change', (e) => {
-            if (e.target.matches('select, input')) {
-                this.updateFilters(e.target);
-            }
-        });
+        const marketFilters = document.getElementById('marketFilters');
+        if (marketFilters) {
+            marketFilters.addEventListener('change', (e) => {
+                if (e.target.matches('select, input')) {
+                    this.updateFilters(e.target);
+                }
+            });
+        }
         
         // Sort
-        document.getElementById('marketSort').addEventListener('change', (e) => {
-            this.filters.sort = e.target.value;
-            this.refreshMarket();
-        });
+        const marketSort = document.getElementById('marketSort');
+        if (marketSort) {
+            marketSort.addEventListener('change', (e) => {
+                this.filters.sort = e.target.value;
+                this.refreshMarket();
+            });
+        }
         
         // Search
-        document.getElementById('marketSearch').addEventListener('input', (e) => {
-            this.handleSearch(e.target.value);
-        });
+        const marketSearch = document.getElementById('marketSearch');
+        if (marketSearch) {
+            marketSearch.addEventListener('input', (e) => {
+                this.handleSearch(e.target.value);
+            });
+        }
     }
 
     showBuyMarket() {

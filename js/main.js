@@ -58,6 +58,13 @@ class HorseTycoon {
     }
 
     setupAudioEvents() {
+        // Safely add event listener
+        const safeAddEvent = (target, event, handler) => {
+            if (target) {
+                target.addEventListener(event, handler);
+            }
+        };
+        
         // Game state events
         eventSystem.on(GameEvents.GAME_STARTED, () => {
             audioManager.playMusic('background');
@@ -97,14 +104,14 @@ class HorseTycoon {
         });
         
         // Add click sound to all buttons
-        document.addEventListener('click', (e) => {
+        safeAddEvent(document, 'click', (e) => {
             if (e.target.matches('button:not([disabled])')) {
                 audioManager.playSfx('click');
             }
         });
         
         // Add hover sound to all buttons
-        document.addEventListener('mouseover', (e) => {
+        safeAddEvent(document, 'mouseover', (e) => {
             if (e.target.matches('button:not([disabled])')) {
                 audioManager.playSfx('hover');
             }

@@ -27,11 +27,22 @@ class UIController {
 
     setupEventListeners() {
         // Main Menu
-        document.getElementById('newGameBtn').addEventListener('click', () => this.showScreen('playerSetup'));
-        document.getElementById('loadGameBtn').addEventListener('click', () => this.gameManager.loadGame());
+        const newGameBtn = document.getElementById('newGameBtn');
+        if (newGameBtn) {
+            newGameBtn.addEventListener('click', () => this.showScreen('playerSetup'));
+        }
+        
+        const loadGameBtn = document.getElementById('loadGameBtn');
+        if (loadGameBtn) {
+            loadGameBtn.addEventListener('click', () => this.gameManager.loadGame());
+        }
         
         // Player Setup
-        document.getElementById('startGameBtn').addEventListener('click', () => this.handleGameStart());
+        const startGameBtn = document.getElementById('startGameBtn');
+        if (startGameBtn) {
+            startGameBtn.addEventListener('click', () => this.handleGameStart());
+        }
+        
         document.querySelectorAll('.difficulty-option').forEach(option => {
             option.addEventListener('click', () => this.selectDifficulty(option.dataset.difficulty));
         });
@@ -47,11 +58,14 @@ class UIController {
         });
 
         // Horse Actions
-        document.getElementById('horseList').addEventListener('click', (e) => {
-            if (e.target.classList.contains('horse-card')) {
-                this.showHorseDetails(e.target.dataset.horseId);
-            }
-        });
+        const horseList = document.getElementById('horseList');
+        if (horseList) {
+            horseList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('horse-card')) {
+                    this.showHorseDetails(e.target.dataset.horseId);
+                }
+            });
+        }
     }
 
     setupAudioControls() {

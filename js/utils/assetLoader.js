@@ -1,6 +1,9 @@
 class AssetLoader {
     constructor() {
-        this.loadingText = document.getElementById('loadingText');
+        this.loadingText = document.querySelector('.loading-text');
+        this.loadingBar = document.querySelector('.loading-bar');
+        this.loadingScreen = document.getElementById('loading-screen');
+        this.mainMenuScreen = document.getElementById('main-menu-screen');
         this.totalAssets = 0;
         this.loadedAssets = 0;
     }
@@ -31,7 +34,9 @@ class AssetLoader {
             this.showMainMenu();
         } catch (error) {
             console.error('Error loading assets:', error);
-            this.loadingText.textContent = `Error loading assets: ${error.message}. Check console for details.`;
+            if (this.loadingText) {
+                this.loadingText.textContent = `Error loading assets: ${error.message}. Check console for details.`;
+            }
         }
     }
 
@@ -58,13 +63,30 @@ class AssetLoader {
         if (this.loadingText) {
             this.loadingText.textContent = `Loading assets: ${progress}%`;
         }
+        if (this.loadingBar) {
+            this.loadingBar.style.width = `${progress}%`;
+        }
     }
 
     showMainMenu() {
-        if (this.loadingText) {
-            this.loadingText.style.display = 'none';
+        if (this.loadingScreen) {
+            this.loadingScreen.style.display = 'none';
         }
-        // Additional main menu setup code here
+        if (this.mainMenuScreen) {
+            this.mainMenuScreen.style.display = 'flex';
+        } else {
+            console.log('Main menu screen element not found. It might have a different ID.');
+            // Try to show the main menu using a different strategy
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.style.display = 'none';
+            });
+            const mainMenu = document.getElementById('mainMenu');
+            if (mainMenu) {
+                mainMenu.style.display = 'flex';
+            } else {
+                console.error('Could not find a main menu screen to display.');
+            }
+        }
     }
 }
 

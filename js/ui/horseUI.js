@@ -6,17 +6,27 @@ class HorseUI {
     }
 
     setupEventListeners() {
+        // Helper function to safely add event listener
+        const safeAddEvent = (id, event, handler) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener(event, handler);
+            } else {
+                console.warn(`Element with ID "${id}" not found in HorseUI.setupEventListeners()`);
+            }
+        };
+        
         // Horse Detail Modal Actions
-        document.getElementById('trainHorseBtn').addEventListener('click', () => this.showTrainingOptions());
-        document.getElementById('sellHorseBtn').addEventListener('click', () => this.initiateSale());
-        document.getElementById('breedHorseBtn').addEventListener('click', () => this.initiateBreeding());
-        document.getElementById('restHorseBtn').addEventListener('click', () => this.restHorse());
+        safeAddEvent('trainHorseBtn', 'click', () => this.showTrainingOptions());
+        safeAddEvent('sellHorseBtn', 'click', () => this.initiateSale());
+        safeAddEvent('breedHorseBtn', 'click', () => this.initiateBreeding());
+        safeAddEvent('restHorseBtn', 'click', () => this.restHorse());
         
         // Training Modal
-        document.getElementById('confirmTrainingBtn').addEventListener('click', () => this.executeTraining());
+        safeAddEvent('confirmTrainingBtn', 'click', () => this.executeTraining());
         
         // Sale Modal
-        document.getElementById('confirmSaleBtn').addEventListener('click', () => this.executeSale());
+        safeAddEvent('confirmSaleBtn', 'click', () => this.executeSale());
     }
 
     updateHorseList() {

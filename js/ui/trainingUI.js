@@ -7,12 +7,22 @@ class TrainingUI {
     }
 
     setupEventListeners() {
-        document.getElementById('trainingTab').addEventListener('click', () => this.showTrainingCenter());
-        document.getElementById('confirmTrainingBtn').addEventListener('click', () => this.confirmTraining());
-        document.getElementById('cancelTrainingBtn').addEventListener('click', () => this.resetTrainingSelection());
+        // Helper function to safely add event listener
+        const safeAddEvent = (id, event, handler) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener(event, handler);
+            } else {
+                console.warn(`Element with ID "${id}" not found in TrainingUI.setupEventListeners()`);
+            }
+        };
+        
+        safeAddEvent('trainingTab', 'click', () => this.showTrainingCenter());
+        safeAddEvent('confirmTrainingBtn', 'click', () => this.confirmTraining());
+        safeAddEvent('cancelTrainingBtn', 'click', () => this.resetTrainingSelection());
         
         // Training history tab
-        document.getElementById('trainingHistoryTab').addEventListener('click', () => this.showTrainingHistory());
+        safeAddEvent('trainingHistoryTab', 'click', () => this.showTrainingHistory());
     }
 
     showTrainingCenter() {
