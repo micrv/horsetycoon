@@ -4,7 +4,26 @@ class UIController {
         this.currentScreen = 'loading';
         this.screens = {};
         this.modals = {};
+        
+        // Safely get audio manager, or create a fallback
         this.audioManager = window.audioManager;
+        if (!this.audioManager) {
+            console.warn("AudioManager not available, creating fallback");
+            // Create a fallback audio manager to prevent errors
+            this.audioManager = {
+                isMusicMuted: false,
+                isSfxMuted: false,
+                musicVolume: 0.5,
+                sfxVolume: 0.5,
+                toggleMusic: () => console.log("Music toggle (fallback)"),
+                toggleSfx: () => console.log("SFX toggle (fallback)"),
+                setMusicVolume: (vol) => console.log("Set music volume (fallback):", vol),
+                setSfxVolume: (vol) => console.log("Set SFX volume (fallback):", vol),
+                playMusic: () => {},
+                playSfx: () => {}
+            };
+        }
+        
         this.initializeScreens();
         this.initializeModals();
         this.setupEventListeners();
@@ -79,6 +98,12 @@ class UIController {
     }
 
     setupAudioControls() {
+        // Don't proceed if audioManager doesn't exist
+        if (!this.audioManager) {
+            console.warn("Cannot setup audio controls: audioManager is undefined");
+            return;
+        }
+
         // Helper function to safely add event listeners
         const safeAddEvent = (selector, event, handler) => {
             const element = typeof selector === 'string' ? document.getElementById(selector) : selector;
@@ -94,13 +119,23 @@ class UIController {
         // Music toggle
         const musicBtn = safeAddEvent('toggleMusic', 'click', () => {
             this.audioManager.toggleMusic();
-            musicBtn?.classList.toggle('muted', this.audioManager.isMusicMuted);
+            if (musicBtn) {
+                // Ensure we have both the button and the property before using
+                const isMuted = typeof this.audioManager.isMusicMuted !== 'undefined' ? 
+                                this.audioManager.isMusicMuted : false;
+                musicBtn.classList.toggle('muted', isMuted);
+            }
         });
 
         // SFX toggle
         const sfxBtn = safeAddEvent('toggleSfx', 'click', () => {
             this.audioManager.toggleSfx();
-            sfxBtn?.classList.toggle('muted', this.audioManager.isSfxMuted);
+            if (sfxBtn) {
+                // Ensure we have both the button and the property before using
+                const isMuted = typeof this.audioManager.isSfxMuted !== 'undefined' ? 
+                                this.audioManager.isSfxMuted : false;
+                sfxBtn.classList.toggle('muted', isMuted);
+            }
         });
 
         // Music volume
@@ -115,25 +150,59 @@ class UIController {
             this.audioManager.setSfxVolume(volume);
         });
 
-        // Set initial states - only if elements exist
-        if (musicBtn) musicBtn.classList.toggle('muted', this.audioManager.isMusicMuted);
-        if (sfxBtn) sfxBtn.classList.toggle('muted', this.audioManager.isSfxMuted);
-        if (musicSlider) musicSlider.value = this.audioManager.musicVolume * 100;
-        if (sfxSlider) sfxSlider.value = this.audioManager.sfxVolume * 100;
+        // Set initial states - only if elements exist and properties are defined
+        if (musicBtn && typeof this.audioManager.isMusicMuted !== 'undefined') {
+            musicBtn.classList.toggle('muted', this.audioManager.isMusicMuted);
+        }
+        if (sfxBtn && typeof this.audioManager.isSfxMuted !== 'undefined') {
+            sfxBtn.classList.toggle('muted', this.audioManager.isSfxMuted);
+        }
+        if (musicSlider && typeof this.audioManager.musicVolume !== 'undefined') {
+            musicSlider.value = this.audioManager.musicVolume * 100;
+        }
+        if (sfxSlider && typeof this.audioManager.sfxVolume !== 'undefined') {
+            sfxSlider.value = this.audioManager.sfxVolume * 100;
+        }
     }
 
     showScreen(screenId) {
-        Object.values(this.screens).forEach(screen => screen.style.display = 'none');
-        this.screens[screenId].style.display = 'block';
-        this.currentScreen = screenId;
+        // Only try to show screen if it exists
+        if (this.screens[screenId]) {
+            // Hide all screens first
+            Object.values(this.screens).forEach(screen => {
+                if (screen) screen.style.display = 'none';
+            });
+            
+            this.screens[screenId].style.display = 'block';
+            this.currentScreen = screenId;
+        } else {
+            console.warn(`Screen not found: ${screenId}`);
+        }
     }
 
     showModal(modalId) {
-        this.modals[modalId].style.display = 'flex';
+        if (this.modals[modalId]) {
+            this.modals[modalId].style.display = 'flex';
+        } else {
+            console.warn(`Modal not found: ${modalId}. Available modals: ${Object.keys(this.modals).join(', ')}`);
+            // Try to find the modal by ID directly as fallback
+            const modalElement = document.getElementById(modalId);
+            if (modalElement) {
+                modalElement.style.display = 'flex';
+                // Add it to our modals object for future use
+                this.modals[modalId] = modalElement;
+            } else {
+                console.error(`Could not find modal with ID: ${modalId}`);
+            }
+        }
     }
 
     closeModal(modal) {
-        modal.style.display = 'none';
+        if (modal && typeof modal.style !== 'undefined') {
+            modal.style.display = 'none';
+        } else {
+            console.warn("Cannot close modal: modal is undefined or missing style property");
+        }
     }
 
     handleGameStart() {
