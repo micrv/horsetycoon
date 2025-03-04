@@ -58,64 +58,93 @@ class HorseTycoon {
     }
 
     setupAudioEvents() {
-        // Safely add event listener
+        // Safely add event listener with better error handling
         const safeAddEvent = (target, event, handler) => {
-            if (target) {
-                target.addEventListener(event, handler);
+            try {
+                if (target) {
+                    target.addEventListener(event, handler);
+                    console.log(`Successfully added ${event} event listener`);
+                } else {
+                    console.warn(`Target is null or undefined. Cannot add ${event} event listener.`);
+                }
+            } catch (error) {
+                console.error(`Error adding ${event} event listener:`, error);
+            }
+        };
+        
+        // Safely add event listeners to game events
+        const safeAddGameEvent = (event, handler) => {
+            try {
+                if (eventSystem && typeof eventSystem.on === 'function') {
+                    eventSystem.on(event, handler);
+                } else {
+                    console.warn(`Event system not ready. Cannot add ${event} event listener.`);
+                }
+            } catch (error) {
+                console.error(`Error adding game event listener for ${event}:`, error);
             }
         };
         
         // Game state events
-        eventSystem.on(GameEvents.GAME_STARTED, () => {
+        safeAddGameEvent(GameEvents.GAME_STARTED, () => {
             audioManager.playMusic('background');
         });
         
         // Horse events
-        eventSystem.on(GameEvents.HORSE_ACQUIRED, () => {
+        safeAddGameEvent(GameEvents.HORSE_ACQUIRED, () => {
             audioManager.playSfx('horseNeigh');
         });
-        eventSystem.on(GameEvents.HORSE_LEVELED_UP, () => {
+        safeAddGameEvent(GameEvents.HORSE_LEVELED_UP, () => {
             audioManager.playSfx('levelUp');
         });
         
         // Race events
-        eventSystem.on(GameEvents.RACE_STARTED, () => {
+        safeAddGameEvent(GameEvents.RACE_STARTED, () => {
             audioManager.playMusic('race');
             audioManager.playSfx('raceStart');
         });
-        eventSystem.on(GameEvents.RACE_FINISHED, () => {
+        safeAddGameEvent(GameEvents.RACE_FINISHED, () => {
             audioManager.playMusic('background');
             audioManager.playSfx('raceFinish');
         });
         
         // Market events
-        eventSystem.on(GameEvents.HORSE_PURCHASED, () => {
+        safeAddGameEvent(GameEvents.HORSE_PURCHASED, () => {
             audioManager.playSfx('coins');
         });
         
         // Achievement events
-        eventSystem.on(GameEvents.ACHIEVEMENT_UNLOCKED, () => {
+        safeAddGameEvent(GameEvents.ACHIEVEMENT_UNLOCKED, () => {
             audioManager.playSfx('achievement');
         });
         
         // UI events
-        eventSystem.on(GameEvents.SCREEN_CHANGED, (screen) => {
+        safeAddGameEvent(GameEvents.SCREEN_CHANGED, (screen) => {
             audioManager.playSfx('click');
         });
         
-        // Add click sound to all buttons
-        safeAddEvent(document, 'click', (e) => {
-            if (e.target.matches('button:not([disabled])')) {
-                audioManager.playSfx('click');
+        // Try multiple approaches to add event listeners to document
+        try {
+            // Add click sound to all buttons
+            if (typeof document !== 'undefined') {
+                safeAddEvent(document, 'click', (e) => {
+                    if (e.target && e.target.matches && e.target.matches('button:not([disabled])')) {
+                        audioManager.playSfx('click');
+                    }
+                });
+                
+                // Add hover sound to all buttons
+                safeAddEvent(document, 'mouseover', (e) => {
+                    if (e.target && e.target.matches && e.target.matches('button:not([disabled])')) {
+                        audioManager.playSfx('hover');
+                    }
+                });
+            } else {
+                console.warn('Document is not defined. UI event listeners could not be added.');
             }
-        });
-        
-        // Add hover sound to all buttons
-        safeAddEvent(document, 'mouseover', (e) => {
-            if (e.target.matches('button:not([disabled])')) {
-                audioManager.playSfx('hover');
-            }
-        });
+        } catch (error) {
+            console.error('Error setting up UI event listeners:', error);
+        }
     }
 
     checkSavedGame() {

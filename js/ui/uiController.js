@@ -26,83 +26,100 @@ class UIController {
     }
 
     setupEventListeners() {
+        // Helper function to safely add event listeners
+        const safeAddEvent = (selector, event, handler) => {
+            const element = typeof selector === 'string' ? document.getElementById(selector) : selector;
+            if (element) {
+                element.addEventListener(event, handler);
+            } else {
+                console.warn(`Element not found: ${typeof selector === 'string' ? selector : 'element'}. Unable to add ${event} event listener.`);
+            }
+        };
+
+        // Helper function to safely add event listeners to multiple elements
+        const safeAddEventAll = (selector, event, handler) => {
+            const elements = document.querySelectorAll(selector);
+            if (elements && elements.length > 0) {
+                elements.forEach(element => element.addEventListener(event, handler));
+            } else {
+                console.warn(`No elements found for: ${selector}. Unable to add ${event} event listeners.`);
+            }
+        };
+
         // Main Menu
-        const newGameBtn = document.getElementById('newGameBtn');
-        if (newGameBtn) {
-            newGameBtn.addEventListener('click', () => this.showScreen('playerSetup'));
-        }
-        
-        const loadGameBtn = document.getElementById('loadGameBtn');
-        if (loadGameBtn) {
-            loadGameBtn.addEventListener('click', () => this.gameManager.loadGame());
-        }
+        safeAddEvent('newGameBtn', 'click', () => this.showScreen('playerSetup'));
+        safeAddEvent('loadGameBtn', 'click', () => this.gameManager.loadGame());
         
         // Player Setup
-        const startGameBtn = document.getElementById('startGameBtn');
-        if (startGameBtn) {
-            startGameBtn.addEventListener('click', () => this.handleGameStart());
-        }
+        safeAddEvent('startGameBtn', 'click', () => this.handleGameStart());
         
-        document.querySelectorAll('.difficulty-option').forEach(option => {
-            option.addEventListener('click', () => this.selectDifficulty(option.dataset.difficulty));
+        safeAddEventAll('.difficulty-option', 'click', (e) => {
+            const option = e.currentTarget;
+            this.selectDifficulty(option.dataset.difficulty);
         });
 
         // Game UI Navigation
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', () => this.handleNavigation(btn.dataset.screen));
+        safeAddEventAll('.nav-btn', 'click', (e) => {
+            const btn = e.currentTarget;
+            this.handleNavigation(btn.dataset.screen);
         });
 
         // Modal Controls
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.addEventListener('click', () => this.closeModal(btn.closest('.modal')));
+        safeAddEventAll('.modal-close', 'click', (e) => {
+            const btn = e.currentTarget;
+            this.closeModal(btn.closest('.modal'));
         });
 
         // Horse Actions
-        const horseList = document.getElementById('horseList');
-        if (horseList) {
-            horseList.addEventListener('click', (e) => {
-                if (e.target.classList.contains('horse-card')) {
-                    this.showHorseDetails(e.target.dataset.horseId);
-                }
-            });
-        }
+        safeAddEvent('horseList', 'click', (e) => {
+            if (e.target.classList.contains('horse-card')) {
+                this.showHorseDetails(e.target.dataset.horseId);
+            }
+        });
     }
 
     setupAudioControls() {
-        const musicBtn = document.getElementById('toggleMusic');
-        const sfxBtn = document.getElementById('toggleSfx');
-        const musicSlider = document.getElementById('musicVolume');
-        const sfxSlider = document.getElementById('sfxVolume');
+        // Helper function to safely add event listeners
+        const safeAddEvent = (selector, event, handler) => {
+            const element = typeof selector === 'string' ? document.getElementById(selector) : selector;
+            if (element) {
+                element.addEventListener(event, handler);
+                return element;
+            } else {
+                console.warn(`Element not found: ${typeof selector === 'string' ? selector : 'element'}. Unable to add ${event} event listener.`);
+                return null;
+            }
+        };
 
         // Music toggle
-        musicBtn.addEventListener('click', () => {
+        const musicBtn = safeAddEvent('toggleMusic', 'click', () => {
             this.audioManager.toggleMusic();
-            musicBtn.classList.toggle('muted', this.audioManager.isMusicMuted);
+            musicBtn?.classList.toggle('muted', this.audioManager.isMusicMuted);
         });
 
         // SFX toggle
-        sfxBtn.addEventListener('click', () => {
+        const sfxBtn = safeAddEvent('toggleSfx', 'click', () => {
             this.audioManager.toggleSfx();
-            sfxBtn.classList.toggle('muted', this.audioManager.isSfxMuted);
+            sfxBtn?.classList.toggle('muted', this.audioManager.isSfxMuted);
         });
 
         // Music volume
-        musicSlider.addEventListener('input', (e) => {
+        const musicSlider = safeAddEvent('musicVolume', 'input', (e) => {
             const volume = parseInt(e.target.value) / 100;
             this.audioManager.setMusicVolume(volume);
         });
 
         // SFX volume
-        sfxSlider.addEventListener('input', (e) => {
+        const sfxSlider = safeAddEvent('sfxVolume', 'input', (e) => {
             const volume = parseInt(e.target.value) / 100;
             this.audioManager.setSfxVolume(volume);
         });
 
-        // Set initial states
-        musicBtn.classList.toggle('muted', this.audioManager.isMusicMuted);
-        sfxBtn.classList.toggle('muted', this.audioManager.isSfxMuted);
-        musicSlider.value = this.audioManager.musicVolume * 100;
-        sfxSlider.value = this.audioManager.sfxVolume * 100;
+        // Set initial states - only if elements exist
+        if (musicBtn) musicBtn.classList.toggle('muted', this.audioManager.isMusicMuted);
+        if (sfxBtn) sfxBtn.classList.toggle('muted', this.audioManager.isSfxMuted);
+        if (musicSlider) musicSlider.value = this.audioManager.musicVolume * 100;
+        if (sfxSlider) sfxSlider.value = this.audioManager.sfxVolume * 100;
     }
 
     showScreen(screenId) {

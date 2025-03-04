@@ -6,25 +6,20 @@ class RaceUI {
     }
 
     setupEventListeners() {
-        const raceScheduleTab = document.getElementById('raceScheduleTab');
-        if (raceScheduleTab) {
-            raceScheduleTab.addEventListener('click', () => this.showRaceSchedule());
-        }
+        // Helper function to safely add event listeners
+        const safeAddEvent = (id, event, handler) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener(event, handler);
+            } else {
+                console.warn(`Element not found: ${id}. Unable to add ${event} event listener.`);
+            }
+        };
         
-        const raceHistoryTab = document.getElementById('raceHistoryTab');
-        if (raceHistoryTab) {
-            raceHistoryTab.addEventListener('click', () => this.showRaceHistory());
-        }
-        
-        const enterRaceBtn = document.getElementById('enterRaceBtn');
-        if (enterRaceBtn) {
-            enterRaceBtn.addEventListener('click', () => this.initiateRaceEntry());
-        }
-        
-        const confirmRaceEntryBtn = document.getElementById('confirmRaceEntryBtn');
-        if (confirmRaceEntryBtn) {
-            confirmRaceEntryBtn.addEventListener('click', () => this.confirmRaceEntry());
-        }
+        safeAddEvent('raceScheduleTab', 'click', () => this.showRaceSchedule());
+        safeAddEvent('raceHistoryTab', 'click', () => this.showRaceHistory());
+        safeAddEvent('enterRaceBtn', 'click', () => this.initiateRaceEntry());
+        safeAddEvent('confirmRaceEntryBtn', 'click', () => this.confirmRaceEntry());
     }
 
     showRaceSchedule() {
