@@ -9,25 +9,25 @@ class AudioManager {
         // Initialize audio elements
         this.sounds = {
             // Background music
-            bgMusic: new Audio('assets/Sound/background-music-224633.mp3'),
-            menuMusic: new Audio('assets/Sound/mystery-music-loop-226835.mp3'),
-            raceMusic: new Audio('assets/Sound/arcade-horse-racing-32871.mp3'),
+            bgMusic: new Audio('/horsetycoon/assets/Sound/background-music-224633.mp3'),
+            menuMusic: new Audio('/horsetycoon/assets/Sound/mystery-music-loop-226835.mp3'),
+            raceMusic: new Audio('/horsetycoon/assets/Sound/arcade-horse-racing-32871.mp3'),
             
             // UI sounds
-            click: new Audio('assets/Sound/horse-snort-95874.mp3'),
-            hover: new Audio('assets/Sound/horse-snort-95874.mp3'),
-            success: new Audio('assets/Sound/violin-music-64019.mp3'),
-            error: new Audio('assets/Sound/horse-snort-95874.mp3'),
+            click: new Audio('/horsetycoon/assets/Sound/horse-snort-95874.mp3'),
+            hover: new Audio('/horsetycoon/assets/Sound/horse-snort-95874.mp3'),
+            success: new Audio('/horsetycoon/assets/Sound/violin-music-64019.mp3'),
+            error: new Audio('/horsetycoon/assets/Sound/horse-snort-95874.mp3'),
             
             // Game sounds
-            horseNeigh: new Audio('assets/Sound/horse-snort-95874.mp3'),
-            horseGallop: new Audio('assets/Sound/horse-footsteps-189992.mp3'),
-            raceStart: new Audio('assets/Sound/horse-footsteps-type-1-235999.mp3'),
-            raceFinish: new Audio('assets/Sound/violin-music-64019.mp3'),
-            relaxingMusic: new Audio('assets/Sound/relaxing-guitar-loop-v5-245859.mp3'),
-            coins: new Audio('assets/Sound/violin-music-64019.mp3'),
-            levelUp: new Audio('assets/Sound/violin-music-64019.mp3'),
-            achievement: new Audio('assets/Sound/violin-music-64019.mp3')
+            horseNeigh: new Audio('/horsetycoon/assets/Sound/horse-snort-95874.mp3'),
+            horseGallop: new Audio('/horsetycoon/assets/Sound/horse-footsteps-189992.mp3'),
+            raceStart: new Audio('/horsetycoon/assets/Sound/horse-footsteps-type-1-235999.mp3'),
+            raceFinish: new Audio('/horsetycoon/assets/Sound/violin-music-64019.mp3'),
+            relaxingMusic: new Audio('/horsetycoon/assets/Sound/relaxing-guitar-loop-v5-245859.mp3'),
+            coins: new Audio('/horsetycoon/assets/Sound/violin-music-64019.mp3'),
+            levelUp: new Audio('/horsetycoon/assets/Sound/violin-music-64019.mp3'),
+            achievement: new Audio('/horsetycoon/assets/Sound/violin-music-64019.mp3')
         };
         
         // Configure all audio elements

@@ -1,9 +1,8 @@
 class AssetLoader {
     constructor() {
+        this.loadingText = document.getElementById('loadingText');
         this.totalAssets = 0;
         this.loadedAssets = 0;
-        this.loadingBar = document.querySelector('.loading-bar');
-        this.loadingText = document.querySelector('.loading-text');
     }
 
     async loadAllAssets() {
@@ -24,7 +23,7 @@ class AssetLoader {
             console.log('Starting to load assets...');
             const loadPromises = soundFiles.map(file => {
                 console.log(`Attempting to load: ${file}`);
-                return this.loadSound(`./assets/Sound/${file}`);
+                return this.loadSound(`/horsetycoon/assets/Sound/${file}`);
             });
             
             await Promise.all(loadPromises);
@@ -36,44 +35,36 @@ class AssetLoader {
         }
     }
 
-    loadSound(src) {
+    async loadSound(path) {
         return new Promise((resolve, reject) => {
             const audio = new Audio();
+            audio.src = path;
             
             audio.oncanplaythrough = () => {
-                console.log(`Successfully loaded: ${src}`);
                 this.loadedAssets++;
-                this.updateLoadingBar();
-                resolve();
+                this.updateLoadingProgress();
+                resolve(audio);
             };
             
-            audio.onerror = (e) => {
-                console.error(`Failed to load sound: ${src}`, e);
-                reject(new Error(`Failed to load ${src}`));
+            audio.onerror = (error) => {
+                console.error(`Error loading audio file ${path}:`, error);
+                reject(new Error(`Failed to load ${path}`));
             };
-            
-            audio.src = src;
-            
-            // Add timeout to catch stalled loads
-            setTimeout(() => {
-                if (audio.readyState !== 4) {
-                    console.warn(`Loading timed out for: ${src}`);
-                    reject(new Error(`Timeout loading ${src}`));
-                }
-            }, 10000); // 10 second timeout
         });
     }
 
-    updateLoadingBar() {
-        const progress = (this.loadedAssets / this.totalAssets) * 100;
-        this.loadingBar.style.width = `${progress}%`;
-        this.loadingText.textContent = `Loading game assets... ${Math.round(progress)}%`;
-        console.log(`Loading progress: ${Math.round(progress)}%`);
+    updateLoadingProgress() {
+        const progress = Math.floor((this.loadedAssets / this.totalAssets) * 100);
+        if (this.loadingText) {
+            this.loadingText.textContent = `Loading assets: ${progress}%`;
+        }
     }
 
     showMainMenu() {
-        document.getElementById('loading-screen').style.display = 'none';
-        document.getElementById('main-menu-screen').style.display = 'flex';
+        if (this.loadingText) {
+            this.loadingText.style.display = 'none';
+        }
+        // Additional main menu setup code here
     }
 }
 
