@@ -806,4 +806,6 @@ class HorseManager {
       horseCount: this.horses.length
     };
   }
-} 
+}
+
+export default HorseManager; 

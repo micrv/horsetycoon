@@ -736,4 +736,6 @@ class Player {
       tutorialStep: this.tutorialStep
     };
   }
-} 
+}
+
+export default Player; 

@@ -3,6 +3,9 @@
  * 
  * Manages overall game state and coordinates between different managers
  */
+import Player from '../models/player.js';
+import HorseManager from './horseManager.js';
+import RaceManager from './raceManager.js';
 
 class GameManager {
   /**
@@ -21,35 +24,18 @@ class GameManager {
     this.tutorialEnabled = config.tutorialEnabled !== false;
     this.tutorialStep = config.tutorialStep || 0;
     
-    // Load manager classes if not in browser context
+    // In Node.js context
     if (typeof require !== 'undefined') {
-      const Player = require('../models/player.js');
-      const HorseManager = require('../managers/horseManager.js');
-      const RaceManager = require('../managers/raceManager.js');
-      
-      this.Player = Player;
-      this.HorseManager = HorseManager;
-      this.RaceManager = RaceManager;
-    } else {
-      this.Player = Player;
-      this.HorseManager = HorseManager;
-      this.RaceManager = RaceManager;
+      // Do nothing, we'll use imports
     }
+    
+    // Register callbacks
+    this.callbacks = {};
     
     // Initialize managers
     this.player = null;
     this.horseManager = null;
     this.raceManager = null;
-    
-    // Event callbacks
-    this.callbacks = {
-      onGameStateChange: [],
-      onDayChange: [],
-      onPlayerUpdate: [],
-      onHorsesUpdate: [],
-      onRacesUpdate: [],
-      onNotification: []
-    };
     
     // Initialize game if config is provided
     if (config.autoInit) {
@@ -66,20 +52,20 @@ class GameManager {
     this.setGameState('loading');
     
     // Initialize player
-    this.player = new this.Player({
+    this.player = new Player({
       gameTime: this.gameTime,
       difficulty: this.difficulty
     });
     
     // Initialize horse manager
-    this.horseManager = new this.HorseManager({
+    this.horseManager = new HorseManager({
       gameTime: this.gameTime,
       playerFunds: this.player.funds,
       stableSize: this.player.maxHorses
     });
     
     // Initialize race manager
-    this.raceManager = new this.RaceManager({
+    this.raceManager = new RaceManager({
       gameTime: this.gameTime,
       playerReputation: this.player.reputation
     });
@@ -121,7 +107,7 @@ class GameManager {
     this.setGameState('playerSetup');
     
     // Initialize player with config
-    this.player = new this.Player({
+    this.player = new Player({
       name: playerConfig.name || 'Player',
       stableName: playerConfig.stableName || 'My Stable',
       gameTime: this.gameTime,
@@ -129,14 +115,14 @@ class GameManager {
     });
     
     // Initialize horse manager
-    this.horseManager = new this.HorseManager({
+    this.horseManager = new HorseManager({
       gameTime: this.gameTime,
       playerFunds: this.player.funds,
       stableSize: this.player.maxHorses
     });
     
     // Initialize race manager
-    this.raceManager = new this.RaceManager({
+    this.raceManager = new RaceManager({
       gameTime: this.gameTime,
       playerReputation: this.player.reputation
     });
@@ -796,12 +782,12 @@ class GameManager {
       
       // Load player
       if (saveData.player) {
-        this.player = new this.Player(saveData.player);
+        this.player = new Player(saveData.player);
       }
       
       // Load horse manager
       if (saveData.horseManager) {
-        this.horseManager = new this.HorseManager({
+        this.horseManager = new HorseManager({
           gameTime: this.gameTime,
           playerFunds: this.player ? this.player.funds : 0,
           stableSize: this.player ? this.player.maxHorses : 5
@@ -815,7 +801,7 @@ class GameManager {
       
       // Load race manager
       if (saveData.raceManager) {
-        this.raceManager = new this.RaceManager({
+        this.raceManager = new RaceManager({
           gameTime: this.gameTime,
           playerReputation: this.player ? this.player.reputation : 0
         });

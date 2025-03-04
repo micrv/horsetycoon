@@ -795,4 +795,6 @@ class RaceManager {
       history: this.raceHistory.length
     };
   }
-} 
+}
+
+export default RaceManager; 
