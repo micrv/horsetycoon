@@ -24,7 +24,8 @@ export default defineConfig({
                 },
                 format: 'es'
             }
-        }
+        },
+        copyPublicDir: true
     },
     publicDir: 'assets',
     resolve: {

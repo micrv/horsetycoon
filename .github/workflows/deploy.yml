@@ -31,6 +31,12 @@ jobs:
       - name: Build
         run: npm run build
       
+      - name: Copy Assets to Dist
+        run: |
+          mkdir -p dist/assets/Sound
+          cp -r assets/Sound/* dist/assets/Sound/
+          ls -la dist/assets/Sound/
+      
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
