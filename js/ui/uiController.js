@@ -31,37 +31,65 @@ class UIController {
     }
 
     initializeScreens() {
-        // Get all screen elements
-        ['loading', 'mainMenu', 'playerSetup', 'gameUI'].forEach(screenId => {
-            this.screens[screenId] = document.getElementById(screenId);
-        });
+        try {
+            // Get all screen elements
+            ['loading', 'mainMenu', 'playerSetup', 'gameUI'].forEach(screenId => {
+                const screen = document.getElementById(screenId);
+                if (screen) {
+                    this.screens[screenId] = screen;
+                } else {
+                    console.warn(`Screen element not found: ${screenId}`);
+                }
+            });
+        } catch (error) {
+            console.error('Error initializing screens:', error);
+        }
     }
 
     initializeModals() {
-        // Get all modal elements
-        ['horseDetail', 'market', 'race', 'breeding', 'training', 'stable'].forEach(modalId => {
-            this.modals[modalId] = document.getElementById(`${modalId}Modal`);
-        });
+        try {
+            // Get all modal elements
+            ['horseDetail', 'market', 'race', 'breeding', 'training', 'stable'].forEach(modalId => {
+                const modal = document.getElementById(`${modalId}Modal`);
+                if (modal) {
+                    this.modals[modalId] = modal;
+                } else {
+                    console.warn(`Modal element not found: ${modalId}Modal`);
+                }
+            });
+        } catch (error) {
+            console.error('Error initializing modals:', error);
+        }
     }
 
     setupEventListeners() {
         // Helper function to safely add event listeners
         const safeAddEvent = (selector, event, handler) => {
-            const element = typeof selector === 'string' ? document.getElementById(selector) : selector;
-            if (element) {
-                element.addEventListener(event, handler);
-            } else {
-                console.warn(`Element not found: ${typeof selector === 'string' ? selector : 'element'}. Unable to add ${event} event listener.`);
+            try {
+                const element = typeof selector === 'string' ? document.getElementById(selector) : selector;
+                if (element) {
+                    element.addEventListener(event, handler);
+                    console.log(`Successfully added ${event} event listener to ${typeof selector === 'string' ? selector : 'element'}`);
+                } else {
+                    console.warn(`Element not found: ${typeof selector === 'string' ? selector : 'element'}. Unable to add ${event} event listener.`);
+                }
+            } catch (error) {
+                console.error(`Error adding ${event} event listener:`, error);
             }
         };
 
         // Helper function to safely add event listeners to multiple elements
         const safeAddEventAll = (selector, event, handler) => {
-            const elements = document.querySelectorAll(selector);
-            if (elements && elements.length > 0) {
-                elements.forEach(element => element.addEventListener(event, handler));
-            } else {
-                console.warn(`No elements found for: ${selector}. Unable to add ${event} event listeners.`);
+            try {
+                const elements = document.querySelectorAll(selector);
+                if (elements && elements.length > 0) {
+                    elements.forEach(element => element.addEventListener(event, handler));
+                    console.log(`Successfully added ${event} event listeners to ${selector}`);
+                } else {
+                    console.warn(`No elements found for: ${selector}. Unable to add ${event} event listeners.`);
+                }
+            } catch (error) {
+                console.error(`Error adding ${event} event listeners to ${selector}:`, error);
             }
         };
 
@@ -106,12 +134,17 @@ class UIController {
 
         // Helper function to safely add event listeners
         const safeAddEvent = (selector, event, handler) => {
-            const element = typeof selector === 'string' ? document.getElementById(selector) : selector;
-            if (element) {
-                element.addEventListener(event, handler);
-                return element;
-            } else {
-                console.warn(`Element not found: ${typeof selector === 'string' ? selector : 'element'}. Unable to add ${event} event listener.`);
+            try {
+                const element = typeof selector === 'string' ? document.getElementById(selector) : selector;
+                if (element) {
+                    element.addEventListener(event, handler);
+                    return element;
+                } else {
+                    console.warn(`Element not found: ${typeof selector === 'string' ? selector : 'element'}. Unable to add ${event} event listener.`);
+                    return null;
+                }
+            } catch (error) {
+                console.error(`Error adding ${event} event listener:`, error);
                 return null;
             }
         };
@@ -120,10 +153,7 @@ class UIController {
         const musicBtn = safeAddEvent('toggleMusic', 'click', () => {
             this.audioManager.toggleMusic();
             if (musicBtn) {
-                // Ensure we have both the button and the property before using
-                const isMuted = typeof this.audioManager.isMusicMuted !== 'undefined' ? 
-                                this.audioManager.isMusicMuted : false;
-                musicBtn.classList.toggle('muted', isMuted);
+                musicBtn.classList.toggle('muted', this.audioManager.isMusicMuted);
             }
         });
 
@@ -131,10 +161,7 @@ class UIController {
         const sfxBtn = safeAddEvent('toggleSfx', 'click', () => {
             this.audioManager.toggleSfx();
             if (sfxBtn) {
-                // Ensure we have both the button and the property before using
-                const isMuted = typeof this.audioManager.isSfxMuted !== 'undefined' ? 
-                                this.audioManager.isSfxMuted : false;
-                sfxBtn.classList.toggle('muted', isMuted);
+                sfxBtn.classList.toggle('muted', this.audioManager.isSfxMuted);
             }
         });
 
@@ -150,118 +177,197 @@ class UIController {
             this.audioManager.setSfxVolume(volume);
         });
 
-        // Set initial states - only if elements exist and properties are defined
-        if (musicBtn && typeof this.audioManager.isMusicMuted !== 'undefined') {
+        // Set initial states
+        if (musicBtn) {
             musicBtn.classList.toggle('muted', this.audioManager.isMusicMuted);
         }
-        if (sfxBtn && typeof this.audioManager.isSfxMuted !== 'undefined') {
+        if (sfxBtn) {
             sfxBtn.classList.toggle('muted', this.audioManager.isSfxMuted);
         }
-        if (musicSlider && typeof this.audioManager.musicVolume !== 'undefined') {
+        if (musicSlider) {
             musicSlider.value = this.audioManager.musicVolume * 100;
         }
-        if (sfxSlider && typeof this.audioManager.sfxVolume !== 'undefined') {
+        if (sfxSlider) {
             sfxSlider.value = this.audioManager.sfxVolume * 100;
         }
     }
 
     showScreen(screenId) {
-        // Only try to show screen if it exists
-        if (this.screens[screenId]) {
-            // Hide all screens first
-            Object.values(this.screens).forEach(screen => {
-                if (screen) screen.style.display = 'none';
-            });
-            
-            this.screens[screenId].style.display = 'block';
-            this.currentScreen = screenId;
-        } else {
-            console.warn(`Screen not found: ${screenId}`);
+        try {
+            // Only try to show screen if it exists
+            if (this.screens[screenId]) {
+                // Hide all screens first
+                Object.values(this.screens).forEach(screen => {
+                    if (screen) screen.style.display = 'none';
+                });
+                
+                this.screens[screenId].style.display = 'block';
+                this.currentScreen = screenId;
+            } else {
+                console.warn(`Screen not found: ${screenId}`);
+            }
+        } catch (error) {
+            console.error(`Error showing screen ${screenId}:`, error);
         }
     }
 
     showModal(modalId) {
-        if (this.modals[modalId]) {
-            this.modals[modalId].style.display = 'flex';
-        } else {
-            console.warn(`Modal not found: ${modalId}. Available modals: ${Object.keys(this.modals).join(', ')}`);
-            // Try to find the modal by ID directly as fallback
-            const modalElement = document.getElementById(modalId);
-            if (modalElement) {
-                modalElement.style.display = 'flex';
-                // Add it to our modals object for future use
-                this.modals[modalId] = modalElement;
+        try {
+            if (this.modals[modalId]) {
+                this.modals[modalId].style.display = 'flex';
             } else {
-                console.error(`Could not find modal with ID: ${modalId}`);
+                console.warn(`Modal not found: ${modalId}. Available modals: ${Object.keys(this.modals).join(', ')}`);
+                // Try to find the modal by ID directly as fallback
+                const modalElement = document.getElementById(modalId);
+                if (modalElement) {
+                    modalElement.style.display = 'flex';
+                    // Add it to our modals object for future use
+                    this.modals[modalId] = modalElement;
+                } else {
+                    console.error(`Could not find modal with ID: ${modalId}`);
+                }
             }
+        } catch (error) {
+            console.error(`Error showing modal ${modalId}:`, error);
         }
     }
 
     closeModal(modal) {
-        if (modal && typeof modal.style !== 'undefined') {
-            modal.style.display = 'none';
-        } else {
-            console.warn("Cannot close modal: modal is undefined or missing style property");
+        try {
+            if (modal && typeof modal.style !== 'undefined') {
+                modal.style.display = 'none';
+            } else {
+                console.warn("Cannot close modal: modal is undefined or missing style property");
+            }
+        } catch (error) {
+            console.error('Error closing modal:', error);
         }
     }
 
     handleGameStart() {
-        const playerName = document.getElementById('playerName').value;
-        const stableName = document.getElementById('stableName').value;
-        if (!playerName || !stableName) {
-            this.showError('Please fill in all fields');
-            return;
+        try {
+            const playerNameInput = document.getElementById('playerName');
+            const stableNameInput = document.getElementById('stableName');
+            
+            if (!playerNameInput || !stableNameInput) {
+                console.warn('Player name or stable name input not found');
+                return;
+            }
+
+            const playerName = playerNameInput.value;
+            const stableName = stableNameInput.value;
+            
+            if (!playerName || !stableName) {
+                this.showError('Please fill in all fields');
+                return;
+            }
+            
+            this.gameManager.startNewGame({
+                name: playerName,
+                stableName: stableName
+            });
+            this.showScreen('gameUI');
+        } catch (error) {
+            console.error('Error handling game start:', error);
         }
-        this.gameManager.startNewGame(playerName, stableName);
-        this.showScreen('gameUI');
     }
 
     selectDifficulty(difficulty) {
-        document.querySelectorAll('.difficulty-option').forEach(opt => {
-            opt.classList.remove('selected');
-        });
-        document.querySelector(`[data-difficulty="${difficulty}"]`).classList.add('selected');
-        this.gameManager.setDifficulty(difficulty);
+        try {
+            const options = document.querySelectorAll('.difficulty-option');
+            if (options.length > 0) {
+                options.forEach(opt => opt.classList.remove('selected'));
+                const selectedOption = document.querySelector(`[data-difficulty="${difficulty}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('selected');
+                    this.gameManager.setDifficulty(difficulty);
+                }
+            }
+        } catch (error) {
+            console.error('Error selecting difficulty:', error);
+        }
     }
 
     handleNavigation(screen) {
-        this.showModal(`${screen}Modal`);
+        try {
+            this.showModal(`${screen}Modal`);
+        } catch (error) {
+            console.error('Error handling navigation:', error);
+        }
     }
 
     showHorseDetails(horseId) {
-        const horse = this.gameManager.getHorse(horseId);
-        this.updateHorseDetailModal(horse);
-        this.showModal('horseDetail');
+        try {
+            const horse = this.gameManager.getHorse(horseId);
+            if (horse) {
+                this.updateHorseDetailModal(horse);
+                this.showModal('horseDetail');
+            }
+        } catch (error) {
+            console.error('Error showing horse details:', error);
+        }
     }
 
     updateHorseDetailModal(horse) {
-        const modal = this.modals.horseDetail;
-        modal.querySelector('.horse-name').textContent = horse.name;
-        modal.querySelector('.horse-stats').innerHTML = `
-            <div>Speed: ${horse.speed}</div>
-            <div>Stamina: ${horse.stamina}</div>
-            <div>Acceleration: ${horse.acceleration}</div>
-            <div>Jumping: ${horse.jumping}</div>
-            <div>Temperament: ${horse.temperament}</div>
-        `;
-        // Update other horse details...
+        try {
+            const modal = this.modals.horseDetail;
+            if (!modal) {
+                console.warn('Horse detail modal not found');
+                return;
+            }
+
+            const nameElement = modal.querySelector('.horse-name');
+            const statsElement = modal.querySelector('.horse-stats');
+            
+            if (nameElement) {
+                nameElement.textContent = horse.name;
+            }
+            
+            if (statsElement) {
+                statsElement.innerHTML = `
+                    <div>Speed: ${horse.speed}</div>
+                    <div>Stamina: ${horse.stamina}</div>
+                    <div>Acceleration: ${horse.acceleration}</div>
+                    <div>Jumping: ${horse.jumping}</div>
+                    <div>Temperament: ${horse.temperament}</div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error updating horse detail modal:', error);
+        }
     }
 
     updatePlayerInfo() {
-        const player = this.gameManager.player;
-        document.getElementById('playerFunds').textContent = `$${player.funds.toLocaleString()}`;
-        document.getElementById('stableLevel').textContent = `Stable Level: ${player.stableLevel}`;
-        document.getElementById('horseCount').textContent = `Horses: ${player.horses.length}/${player.maxHorses}`;
+        try {
+            const player = this.gameManager.player;
+            if (!player) {
+                console.warn('Player not initialized');
+                return;
+            }
+
+            const updateElement = (id, value) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = value;
+                }
+            };
+
+            updateElement('playerFunds', `$${player.funds.toLocaleString()}`);
+            updateElement('stableLevel', `Stable Level: ${player.stableLevel}`);
+            updateElement('horseCount', `Horses: ${player.horses.length}/${player.maxHorses}`);
+        } catch (error) {
+            console.error('Error updating player info:', error);
+        }
     }
 
     showError(message) {
-        // Implement error notification
         console.error(message);
+        // Implement error notification UI if needed
     }
 
     showSuccess(message) {
-        // Implement success notification
         console.log(message);
+        // Implement success notification UI if needed
     }
 }
 

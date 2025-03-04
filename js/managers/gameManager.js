@@ -938,6 +938,35 @@ class GameManager {
       }
     };
   }
+
+  /**
+   * Check if there is a saved game
+   * @returns {boolean} True if there is a saved game
+   */
+  hasSavedGame() {
+    try {
+      const savedGame = localStorage.getItem('horseTycoonSave');
+      return savedGame !== null;
+    } catch (error) {
+      console.error('Error checking for saved game:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Update game state
+   * @returns {Object} Update result
+   */
+  update() {
+    if (this.gameState === 'playing') {
+      return this.advanceDay();
+    }
+    return {
+      success: true,
+      message: 'Game not in playing state',
+      gameState: this.gameState
+    };
+  }
 }
 
 export default GameManager; 

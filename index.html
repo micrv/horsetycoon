@@ -30,7 +30,7 @@
 
     <div id="game-container">
         <!-- Loading Screen -->
-        <div id="loading-screen" class="screen">
+        <div id="loading" class="screen">
             <div class="loading-content">
                 <h1>HORSE TYCOON</h1>
                 <div class="loading-bar-container">
@@ -41,38 +41,38 @@
         </div>
 
         <!-- Main Menu Screen -->
-        <div id="main-menu-screen" class="screen">
+        <div id="mainMenu" class="screen">
             <div class="main-menu-content">
                 <h1 class="game-title">HORSE TYCOON</h1>
                 <div class="menu-buttons">
-                    <button id="new-game-btn" class="primary-btn">New Game</button>
-                    <button id="load-game-btn" class="primary-btn">Load Game</button>
-                    <button id="options-btn" class="secondary-btn">Options</button>
-                    <button id="credits-btn" class="secondary-btn">Credits</button>
+                    <button id="newGameBtn" class="primary-btn">New Game</button>
+                    <button id="loadGameBtn" class="primary-btn">Load Game</button>
+                    <button id="optionsBtn" class="secondary-btn">Options</button>
+                    <button id="creditsBtn" class="secondary-btn">Credits</button>
                 </div>
             </div>
         </div>
 
         <!-- Player Setup Screen -->
-        <div id="player-setup-screen" class="screen">
+        <div id="playerSetup" class="screen">
             <div class="screen-header">
                 <h2>Create Your Stable</h2>
             </div>
             <div class="setup-form">
                 <div class="form-group">
-                    <label for="stable-name">Stable Name:</label>
-                    <input type="text" id="stable-name" maxlength="20" placeholder="Enter stable name...">
+                    <label for="stableName">Stable Name:</label>
+                    <input type="text" id="stableName" maxlength="20" placeholder="Enter stable name...">
                 </div>
                 <div class="form-group">
-                    <label for="player-name">Your Name:</label>
-                    <input type="text" id="player-name" maxlength="20" placeholder="Enter your name...">
+                    <label for="playerName">Your Name:</label>
+                    <input type="text" id="playerName" maxlength="20" placeholder="Enter your name...">
                 </div>
                 <div class="form-group">
                     <label>Difficulty:</label>
                     <div class="difficulty-options">
-                        <button class="difficulty-btn" data-difficulty="easy">Easy</button>
-                        <button class="difficulty-btn selected" data-difficulty="normal">Normal</button>
-                        <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+                        <button class="difficulty-option" data-difficulty="easy">Easy</button>
+                        <button class="difficulty-option selected" data-difficulty="normal">Normal</button>
+                        <button class="difficulty-option" data-difficulty="hard">Hard</button>
                     </div>
                 </div>
                 <div class="form-group">
@@ -82,14 +82,14 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button id="back-to-menu-btn" class="secondary-btn">Back</button>
-                    <button id="start-game-btn" class="primary-btn">Start Game</button>
+                    <button id="backToMenuBtn" class="secondary-btn">Back</button>
+                    <button id="startGameBtn" class="primary-btn">Start Game</button>
                 </div>
             </div>
         </div>
 
         <!-- Game UI -->
-        <div id="game-ui" class="screen">
+        <div id="gameUI" class="screen">
             <!-- Player Info Bar -->
             <div id="player-info-bar">
                 <div class="player-stable-info">

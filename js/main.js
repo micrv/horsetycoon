@@ -148,38 +148,57 @@ class HorseTycoon {
     }
 
     checkSavedGame() {
-        if (this.gameManager.hasSavedGame()) {
-            document.getElementById('loadGameBtn').disabled = false;
+        try {
+            if (this.gameManager.hasSavedGame()) {
+                const loadGameBtn = document.getElementById('loadGameBtn');
+                if (loadGameBtn) {
+                    loadGameBtn.disabled = false;
+                }
+            }
+        } catch (error) {
+            console.warn('Error checking saved game:', error);
         }
     }
 
     updateUI() {
-        // Update player info
-        this.uiController.updatePlayerInfo();
-        
-        // Update horse list if visible
-        if (document.getElementById('horseList').offsetParent !== null) {
-            this.horseUI.updateHorseList();
-        }
-        
-        // Update race schedule if visible
-        if (document.getElementById('raceSchedule').offsetParent !== null) {
-            this.raceUI.showRaceSchedule();
-        }
-        
-        // Update market if visible
-        if (document.getElementById('marketListings').offsetParent !== null) {
-            this.marketUI.refreshMarket();
-        }
-        
-        // Update breeding center if visible
-        if (document.getElementById('breedingCenter').offsetParent !== null) {
-            this.breedingUI.updateAvailableHorses();
-        }
-        
-        // Update training center if visible
-        if (document.getElementById('trainingCenter').offsetParent !== null) {
-            this.trainingUI.updateAvailableHorses();
+        try {
+            // Update player info if UI controller exists
+            if (this.uiController && typeof this.uiController.updatePlayerInfo === 'function') {
+                this.uiController.updatePlayerInfo();
+            }
+            
+            // Helper function to safely check if element is visible
+            const isElementVisible = (id) => {
+                const element = document.getElementById(id);
+                return element && element.offsetParent !== null;
+            };
+            
+            // Update horse list if visible
+            if (isElementVisible('horseList') && this.horseUI) {
+                this.horseUI.updateHorseList();
+            }
+            
+            // Update race schedule if visible
+            if (isElementVisible('raceSchedule') && this.raceUI) {
+                this.raceUI.showRaceSchedule();
+            }
+            
+            // Update market if visible
+            if (isElementVisible('marketListings') && this.marketUI) {
+                this.marketUI.refreshMarket();
+            }
+            
+            // Update breeding center if visible
+            if (isElementVisible('breedingCenter') && this.breedingUI) {
+                this.breedingUI.updateAvailableHorses();
+            }
+            
+            // Update training center if visible
+            if (isElementVisible('trainingCenter') && this.trainingUI) {
+                this.trainingUI.updateAvailableHorses();
+            }
+        } catch (error) {
+            console.warn('Error updating UI:', error);
         }
     }
 }
